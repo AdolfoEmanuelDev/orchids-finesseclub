@@ -3,7 +3,7 @@ import path from "node:path";
 
 const LOADER = path.resolve(__dirname, 'src/visual-edits/component-tagger-loader.js');
 
-  const nextConfig: NextConfig = {
+const nextConfig: NextConfig = {
   output: 'export',
   images: {
     unoptimized: true,
@@ -18,7 +18,6 @@ const LOADER = path.resolve(__dirname, 'src/visual-edits/component-tagger-loader
       },
     ],
   },
-  outputFileTracingRoot: path.resolve(__dirname, '../../'),
   typescript: {
     ignoreBuildErrors: true,
   },
@@ -35,4 +34,3 @@ const LOADER = path.resolve(__dirname, 'src/visual-edits/component-tagger-loader
 };
 
 export default nextConfig;
-// Orchids restart: 1766997730530

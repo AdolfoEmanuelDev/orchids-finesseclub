@@ -1,5 +1,5 @@
 import { PRODUCTS } from '@/lib/products';
-import ProductClient from './ProductClient';
+import ProductPageClient from './ProductPageClient';
 
 export function generateStaticParams() {
   return PRODUCTS.map((product) => ({
@@ -11,5 +11,5 @@ export default async function ProductPage({ params }: { params: Promise<{ id: st
   const { id } = await params;
   const product = PRODUCTS.find((p) => p.id === id);
 
-  return <ProductClient product={product} />;
+  return <ProductPageClient product={product} />;
 }

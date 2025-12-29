@@ -7,7 +7,7 @@ import Header from "@/components/sections/Header";
 import { Product } from '@/lib/products';
 import { useCart } from '@/components/cart-context';
 
-export default function ProductClient({ product }: { product: Product | undefined }) {
+export default function ProductPageClient({ product }: { product: Product | undefined }) {
   const { addToCart } = useCart();
   const [activeImage, setActiveImage] = useState<string>('');
 
