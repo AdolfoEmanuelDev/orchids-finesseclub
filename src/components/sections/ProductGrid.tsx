@@ -60,7 +60,7 @@ const ProductCard = ({ product }: { product: Product }) => {
 
 const ProductGrid = () => {
   return (
-    <main className="pt-52 pb-12 bg-black min-h-screen">
+    <main className="pt-64 pb-12 bg-black min-h-screen">
       <div className="container px-4 mx-auto max-w-[1536px]">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
           {PRODUCTS.map((product) => (
