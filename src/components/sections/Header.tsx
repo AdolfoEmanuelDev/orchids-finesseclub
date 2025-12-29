@@ -10,20 +10,20 @@ const Header = () => {
   const { cartCount, setIsDrawerOpen } = useCart();
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50 bg-black">
-      <div className="container px-4 py-6 flex items-center justify-between">
+    <header className="fixed top-0 left-0 w-full z-50 bg-black/80 backdrop-blur-md border-b border-white/5">
+      <div className="container px-4 py-4 flex items-center justify-between">
         {/* Logo Section */}
         <Link 
           href="/"
           className="block hover:opacity-80 transition-opacity focus:outline-none"
         >
-          <div className="flex items-center px-[12px] py-[8px]">
+          <div className="flex items-center">
             <Image
               src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/e0354d74-faf5-4977-8775-aa3ee0f7ed6c-survclothes-psqcipms-manus-space/assets/images/logo-fc-1.png"
               alt="FC"
-              width={106}
-              height={88}
-              className="w-full h-full object-contain"
+              width={180}
+              height={150}
+              className="w-auto h-auto max-h-[120px] object-contain"
               priority
             />
           </div>
