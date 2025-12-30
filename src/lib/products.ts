@@ -20,7 +20,7 @@ export const PRODUCTS: Product[] = [
         'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/tjust-detalhe-costa-resized-1766999555086.jpeg?width=8000&height=8000&resize=contain',
         'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/TAG-tjust-resized-1766999555084.jpeg?width=8000&height=8000&resize=contain'
       ],
-    checkoutUrl: 'https://seguro.finesseclub.com.br/r/MPMGCJXPW0',
+    checkoutUrl: 'https://seguro.finesseclub.com.br/r/1YMS8P7GFD',
       description: "Pouquíssimo uso. (DS)\nModelagem relaxed / oversized\nSize S"
     },
     {
@@ -32,7 +32,7 @@ export const PRODUCTS: Product[] = [
           'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/WhatsApp-Image-2025-12-22-at-00.43.20-4-resized-1766999902938.jpeg?width=8000&height=8000&resize=contain',
           'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/Umtee-Tag-resized-1766999689554.jpeg?width=8000&height=8000&resize=contain'
         ],
-      checkoutUrl: 'https://seguro.finesseclub.com.br/r/G4GCOI6B6J',
+      checkoutUrl: 'https://seguro.finesseclub.com.br/r/MPMGCJXPW0',
       description: "Pouquíssimo uso. (Ds)\nModelagem regular/slim"
     },
     {

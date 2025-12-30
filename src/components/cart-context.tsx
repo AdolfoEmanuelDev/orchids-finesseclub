@@ -64,26 +64,26 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       return parseFloat(numericOnly) || 0;
     };
 
-  useEffect(() => {
-    const savedCart = localStorage.getItem("survival-energy-cart");
-    if (savedCart) {
-      try {
-        const parsed = JSON.parse(savedCart);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          setItems(parsed);
+    useEffect(() => {
+      const savedCart = localStorage.getItem("finesse-club-v2-cart");
+      if (savedCart) {
+        try {
+          const parsed = JSON.parse(savedCart);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            setItems(parsed);
+          }
+        } catch (e) {
+          console.error("Failed to parse cart", e);
         }
-      } catch (e) {
-        console.error("Failed to parse cart", e);
       }
-    }
-    setIsInitialized(true);
-  }, []);
-
-  useEffect(() => {
-    if (isInitialized) {
-      localStorage.setItem("survival-energy-cart", JSON.stringify(items));
-    }
-  }, [items, isInitialized]);
+      setIsInitialized(true);
+    }, []);
+  
+    useEffect(() => {
+      if (isInitialized) {
+        localStorage.setItem("finesse-club-v2-cart", JSON.stringify(items));
+      }
+    }, [items, isInitialized]);
 
   const addToCart = (product: { id: string; name: string; price: string | number; image?: string; checkoutUrl?: string }) => {
     setItems((prev) => {

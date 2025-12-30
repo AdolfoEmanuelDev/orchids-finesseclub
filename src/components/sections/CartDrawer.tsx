@@ -61,10 +61,22 @@ export default function CartDrawer() {
 
         const finalUrl = `${baseUrl}${tokenString}`;
 
-        window.parent.postMessage({ 
-          type: "OPEN_EXTERNAL_URL", 
-          data: { url: finalUrl } 
-        }, "*");
+        if (typeof window !== "undefined") {
+          // Check if we're in the Orchids preview environment
+          const isOrchids = window.location.hostname.includes("orchids") || 
+                           window.location.hostname.includes("localhost") ||
+                           window.location.hostname.includes("127.0.0.1");
+
+          if (isOrchids && window.self !== window.top) {
+            window.parent.postMessage({ 
+              type: "OPEN_EXTERNAL_URL", 
+              data: { url: finalUrl } 
+            }, "*");
+          } else {
+            // Direct redirect for production/Netlify
+            window.location.href = finalUrl;
+          }
+        }
       } catch (error) {
         console.error("Error during checkout redirection:", error);
       }
