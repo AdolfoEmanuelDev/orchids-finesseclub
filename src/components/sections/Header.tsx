@@ -17,16 +17,16 @@ const Header = () => {
           href="/"
           className="block hover:opacity-80 transition-opacity focus:outline-none"
         >
-            <div className="flex items-center px-[12px] py-[8px]">
-              <Image
-                src="/logo.png"
-                alt="FC"
-                width={106}
-                height={88}
-                className="w-full h-full object-contain"
-                priority
-              />
-            </div>
+          <div className="flex items-center px-[12px] py-[8px]">
+            <Image
+              src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/e0354d74-faf5-4977-8775-aa3ee0f7ed6c-survclothes-psqcipms-manus-space/assets/images/logo-fc-1.png"
+              alt="FC"
+              width={106}
+              height={88}
+              className="w-full h-full object-contain"
+              priority
+            />
+          </div>
         </Link>
 
         {/* Navigation Section */}

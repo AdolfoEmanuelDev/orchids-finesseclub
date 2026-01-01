@@ -21,9 +21,24 @@ export const metadata: Metadata = {
     siteName: "Finesse Club",
     locale: "pt_BR",
     type: "website",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 512,
+        height: 512,
+        alt: "Finesse Club",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary",
+    title: "Finesse Club",
+    description: "Curadoria e revenda de peças High-End.",
+    images: ["/og-image.png"],
   },
   icons: {
-    icon: "/favicon.ico",
+    icon: "/favicon.png",
+    apple: "/favicon.png",
   },
 };
 
