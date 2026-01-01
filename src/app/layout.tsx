@@ -8,8 +8,23 @@ import { CartProvider } from "@/components/cart-context";
 import CartDrawer from "@/components/sections/CartDrawer";
 
 export const metadata: Metadata = {
-  title: "FC - SurvClothes",
-  description: "High-end streetwear clothing store",
+  title: {
+    default: "Finesse Club",
+    template: "%s | Finesse Club",
+  },
+  description: "Curadoria e revenda de peças High-End.",
+  metadataBase: new URL("https://finesseclub.com.br"),
+  openGraph: {
+    title: "Finesse Club",
+    description: "Curadoria e revenda de peças High-End.",
+    url: "https://finesseclub.com.br",
+    siteName: "Finesse Club",
+    locale: "pt_BR",
+    type: "website",
+  },
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
