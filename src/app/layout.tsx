@@ -23,10 +23,10 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/og-image.png",
+        url: "/favicon.png",
         width: 512,
         height: 512,
-        alt: "Finesse Club",
+        alt: "Finesse Club Logo",
       },
     ],
   },
@@ -34,10 +34,11 @@ export const metadata: Metadata = {
     card: "summary",
     title: "Finesse Club",
     description: "Curadoria e revenda de peças High-End.",
-    images: ["/og-image.png"],
+    images: ["/favicon.png"],
   },
   icons: {
     icon: "/favicon.png",
+    shortcut: "/favicon.png",
     apple: "/favicon.png",
   },
 };
@@ -49,6 +50,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
+      <head>
+        <link rel="icon" href="/favicon.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/favicon.png" />
+      </head>
       <body className="antialiased bg-black overflow-x-hidden">
         <CartProvider>
           <Script
