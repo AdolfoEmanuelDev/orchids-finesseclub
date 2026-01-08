@@ -13,6 +13,7 @@ export const metadata: Metadata = {
     template: "%s | Finesse Club",
   },
   description: "Curadoria e revenda de peças High-End.",
+  keywords: ["moda high end", "hign end", "cdg", "camiseta comme des garçons", "Finesse Club", "revenda luxo"],
   metadataBase: new URL("https://finesseclub.com.br"),
   openGraph: {
     title: "Finesse Club",
@@ -50,10 +51,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <head>
-        <link rel="icon" href="/favicon.png" type="image/png" />
-        <link rel="apple-touch-icon" href="/favicon.png" />
-      </head>
       <body className="antialiased bg-black overflow-x-hidden">
         <CartProvider>
           <Script
@@ -64,7 +61,7 @@ export default function RootLayout({
           />
           <ErrorReporter />
           <Script
-            src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/scripts//route-messenger.js"
+            src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/scripts/route-messenger.js"
             strategy="afterInteractive"
             data-target-origin="*"
             data-message-type="ROUTE_CHANGE"
