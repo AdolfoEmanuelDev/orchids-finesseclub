@@ -9,14 +9,18 @@ import CartDrawer from "@/components/sections/CartDrawer";
 
 export const metadata: Metadata = {
   title: {
-    default: "Finesse Club",
+    default: "Finesse Club | Curadoria High-End",
     template: "%s | Finesse Club",
   },
-  description: "Curadoria e revenda de peças High-End.",
+  description: "Curadoria e revenda de peças High-End, Streetwear de luxo e marcas exclusivas como Diesel, Ralph Lauren e Comme des Garçons.",
+  keywords: ["moda high end", "hign end", "cdg", "camiseta comme des garçons", "finesse club", "streetwear luxo", "diesel", "ralph lauren", "revenda luxo", "curadoria moda"],
   metadataBase: new URL("https://finesseclub.com.br"),
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
-    title: "Finesse Club",
-    description: "Curadoria e revenda de peças High-End.",
+    title: "Finesse Club | Curadoria High-End",
+    description: "Peças exclusivas de marcas High-End e Streetwear de luxo.",
     url: "https://finesseclub.com.br",
     siteName: "Finesse Club",
     locale: "pt_BR",
@@ -24,22 +28,21 @@ export const metadata: Metadata = {
     images: [
       {
         url: "/favicon.png",
-        width: 512,
-        height: 512,
+        width: 1200,
+        height: 630,
         alt: "Finesse Club Logo",
       },
     ],
   },
   twitter: {
-    card: "summary",
-    title: "Finesse Club",
-    description: "Curadoria e revenda de peças High-End.",
+    card: "summary_large_image",
+    title: "Finesse Club | Curadoria High-End",
+    description: "Peças exclusivas de marcas High-End e Streetwear de luxo.",
     images: ["/favicon.png"],
   },
-  icons: {
-    icon: "/favicon.png",
-    shortcut: "/favicon.png",
-    apple: "/favicon.png",
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 
@@ -50,10 +53,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <head>
-        <link rel="icon" href="/favicon.png" type="image/png" />
-        <link rel="apple-touch-icon" href="/favicon.png" />
-      </head>
       <body className="antialiased bg-black overflow-x-hidden">
         <CartProvider>
           <Script
