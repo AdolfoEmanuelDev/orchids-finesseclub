@@ -90,12 +90,26 @@ export default function ProductPage() {
 
             {/* Product Info */}
             <div className="flex flex-col">
-                <h1 className="text-3xl md:text-4xl font-bold uppercase tracking-tight mb-4 leading-tight">
-                  {product.name}
-                </h1>
+                <div className="flex items-center gap-4 mb-2">
+                  <h1 className="text-3xl md:text-4xl font-bold uppercase tracking-tight leading-tight">
+                    {product.name}
+                  </h1>
+                  {product.originalPrice && (
+                    <span className="bg-white text-black text-[10px] font-bold px-2 py-1 uppercase tracking-widest">
+                      Oferta
+                    </span>
+                  )}
+                </div>
               
-              <div className="text-2xl font-bold mb-8">
-                {product.price}
+              <div className="flex items-baseline gap-4 mb-8">
+                <div className="text-2xl font-bold">
+                  {product.price}
+                </div>
+                {product.originalPrice && (
+                  <div className="text-lg text-gray-500 line-through">
+                    {product.originalPrice}
+                  </div>
+                )}
               </div>
 
               {product.description && (

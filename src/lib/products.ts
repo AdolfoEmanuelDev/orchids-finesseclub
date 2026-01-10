@@ -2,6 +2,7 @@ export interface Product {
   id: string;
   name: string;
   price: string;
+  originalPrice?: string;
   image?: string;
   secondaryImages?: string[];
   checkoutUrl: string;
@@ -13,7 +14,8 @@ export const PRODUCTS: Product[] = [
 {
     id: '1',
     name: 'Diesel® T-just G15 Black',
-    price: 'R$ 650,00',
+    price: 'R$ 555,00',
+    originalPrice: 'R$ 650,00',
     image: 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/1-resized-1766993128359.jpeg?width=8000&height=8000&resize=cover',
       secondaryImages: [
         'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/tjust-detelhe1-resized-1766999555080.jpeg?width=8000&height=8000&resize=contain',
