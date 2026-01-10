@@ -25,10 +25,11 @@ export const PRODUCTS: Product[] = [
     checkoutUrl: 'https://seguro.finesseclub.com.br/r/1YMS8P7GFD',
       description: "Pouquíssimo uso. (DS)\nModelagem relaxed / oversized\nSize S"
     },
-    {
-      id: '2',
-      name: 'Diesel® umtee Black',
-      price: 'R$ 200,00',
+      {
+        id: '2',
+        name: 'Diesel® umtee Black',
+        price: 'R$ 199,90',
+        originalPrice: 'R$ 250,00',
       image: 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/umtee-frente-1766993377479.jpeg?width=8000&height=8000&resize=cover',
         secondaryImages: [
           'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/WhatsApp-Image-2025-12-22-at-00.43.20-4-resized-1766999902938.jpeg?width=8000&height=8000&resize=contain',
@@ -37,10 +38,11 @@ export const PRODUCTS: Product[] = [
       checkoutUrl: 'https://seguro.finesseclub.com.br/r/MPMGCJXPW0',
       description: "Pouquíssimo uso. (Ds)\nModelagem regular/slim"
     },
-    {
-      id: '3',
-      name: 'Suéter Polo Ralph Lauren®',
-      price: "R$ 950,00",
+      {
+        id: '3',
+        name: 'Suéter Polo Ralph Lauren®',
+        price: "R$ 950,00",
+        originalPrice: "R$ 1.250,00",
       image: 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/ralph-lauren-Frenteeeee-resized-1766997310267.webp?width=8000&height=8000&resize=contain',
         secondaryImages: [
           'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/WhatsApp-Image-2025-12-22-at-00.43.20-6-resized-1767000342993.jpeg?width=8000&height=8000&resize=contain',
@@ -51,10 +53,11 @@ export const PRODUCTS: Product[] = [
       zoom: 1.0,
       description: "Peça nova, sem etiqueta. (DS)\nPeça em tricô e logo bordado.\nAcompanha dust bag.\nSize S"
     },
-  {
-    id: '4',
-    name: 'Lacoste® Pima Cotton',
-    price: 'R$ 245,00',
+    {
+      id: '4',
+      name: 'Lacoste® Pima Cotton',
+      price: 'R$ 245,00',
+      originalPrice: 'R$ 399,99',
       image: 'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/IMG_4212-resized-1766993521116.jpg?width=8000&height=8000&resize=cover',
       secondaryImages: [
         'https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/document-uploads/imageeeeeeeeeeeeee-resized-1767000724763.jpg?width=8000&height=8000&resize=contain',
