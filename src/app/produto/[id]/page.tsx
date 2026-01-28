@@ -7,6 +7,7 @@ import { useParams } from 'next/navigation';
 import Header from "@/components/sections/Header";
 import { PRODUCTS } from '@/lib/products';
 import { useCart } from '@/components/cart-context';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function ProductPage() {
   const params = useParams();
@@ -35,35 +36,67 @@ export default function ProductPage() {
 
   const allImages = [product.image, ...(product.secondaryImages || [])].filter(Boolean) as string[];
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } }
+  };
+
   return (
     <div className="min-h-screen bg-black text-white selection:bg-white selection:text-black font-sans">
       <Header />
       
-      <main className="pt-64 pb-20">
+      <motion.main 
+        initial="hidden"
+        animate="visible"
+        variants={containerVariants}
+        className="pt-64 pb-20"
+      >
         <div className="container mx-auto px-4 max-w-[1200px]">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-start">
             
             {/* Image Gallery */}
-            <div className="space-y-4">
-              <div className="relative aspect-[3/4] overflow-hidden bg-black flex items-center justify-center group">
-                {activeImage ? (
-                  <div className="w-full h-full transition-transform duration-500 hover:scale-110">
-                    <Image
-                      src={activeImage}
-                      alt={product.name}
-                      fill
-                      style={product.zoom ? { transform: `scale(${product.zoom})` } : {}}
-                      className="object-cover !w-full !h-full !max-w-full"
-                      priority
-                    />
-                  </div>
-                ) : (
-                  <div className="w-full h-full bg-[#1F2937] flex items-center justify-center">
-                    <span className="text-[#9CA3AF] uppercase text-sm tracking-widest">
-                      Imagem indisponível
-                    </span>
-                  </div>
-                )}
+            <motion.div variants={itemVariants} className="space-y-4">
+              <div className="relative aspect-[3/4] overflow-hidden bg-[#111] flex items-center justify-center group">
+                <AnimatePresence mode="wait">
+                  {activeImage ? (
+                    <motion.div 
+                      key={activeImage}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.4, ease: "easeInOut" }}
+                      className="w-full h-full"
+                    >
+                      <div className="w-full h-full transition-transform duration-700 hover:scale-105">
+                        <Image
+                          src={activeImage}
+                          alt={product.name}
+                          fill
+                          style={product.zoom ? { transform: `scale(${product.zoom})` } : {}}
+                          className="object-cover !w-full !h-full !max-w-full"
+                          priority
+                        />
+                      </div>
+                    </motion.div>
+                  ) : (
+                    <div className="w-full h-full bg-[#1F2937] flex items-center justify-center">
+                      <span className="text-[#9CA3AF] uppercase text-sm tracking-widest">
+                        Imagem indisponível
+                      </span>
+                    </div>
+                  )}
+                </AnimatePresence>
               </div>
 
               {allImages.length > 1 && (
@@ -72,8 +105,8 @@ export default function ProductPage() {
                     <button
                       key={idx}
                       onClick={() => setActiveImage(img)}
-                      className={`relative aspect-[3/4] overflow-hidden border-2 transition-colors ${
-                        activeImage === img ? 'border-white' : 'border-transparent opacity-50 hover:opacity-100'
+                      className={`relative aspect-[3/4] overflow-hidden border-2 transition-all duration-300 ${
+                        activeImage === img ? 'border-white opacity-100 scale-95' : 'border-transparent opacity-40 hover:opacity-80'
                       }`}
                     >
                       <Image
@@ -86,11 +119,11 @@ export default function ProductPage() {
                   ))}
                 </div>
               )}
-            </div>
+            </motion.div>
 
             {/* Product Info */}
             <div className="flex flex-col">
-                <div className="flex items-center gap-4 mb-2">
+                <motion.div variants={itemVariants} className="flex items-center gap-4 mb-2">
                   <h1 className="text-3xl md:text-4xl font-bold uppercase tracking-tight leading-tight">
                     {product.name}
                   </h1>
@@ -99,9 +132,9 @@ export default function ProductPage() {
                       Oferta
                     </span>
                   )}
-                </div>
+                </motion.div>
               
-              <div className="flex items-baseline gap-4 mb-8">
+              <motion.div variants={itemVariants} className="flex items-baseline gap-4 mb-8">
                 <div className="text-2xl font-bold">
                   {product.price}
                 </div>
@@ -110,47 +143,50 @@ export default function ProductPage() {
                     {product.originalPrice}
                   </div>
                 )}
-              </div>
+              </motion.div>
 
               {product.description && (
-                <div className="mb-10 text-gray-300 leading-relaxed text-sm max-w-[500px] whitespace-pre-wrap">
+                <motion.div 
+                  variants={itemVariants}
+                  className="mb-10 text-gray-400 leading-relaxed text-sm max-w-[500px] whitespace-pre-wrap font-light"
+                >
                   {product.description}
-                </div>
+                </motion.div>
               )}
 
-              <div className="space-y-4 max-w-[400px]">
+              <motion.div variants={itemVariants} className="space-y-4 max-w-[400px]">
                 <button
                   onClick={() => addToCart(product)}
-                  className="w-full bg-white text-black py-4 font-bold uppercase tracking-widest hover:bg-gray-200 transition-colors"
+                  className="w-full bg-white text-black py-4 font-bold uppercase tracking-widest hover:bg-gray-200 transition-all duration-300 active:scale-[0.98]"
                 >
                   Adicionar ao Carrinho
                 </button>
                 
                 <a
                   href={product.checkoutUrl}
-                  className="block w-full text-center border border-white text-white py-4 font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-colors"
+                  className="block w-full text-center border border-white text-white py-4 font-bold uppercase tracking-widest hover:bg-white hover:text-black transition-all duration-300 active:scale-[0.98]"
                 >
                   Comprar Agora
                 </a>
-              </div>
+              </motion.div>
 
-              <div className="mt-12 pt-12 border-t border-gray-800">
+              <motion.div variants={itemVariants} className="mt-12 pt-12 border-t border-gray-900">
                 <div className="grid grid-cols-2 gap-8 text-[10px] uppercase tracking-widest font-bold">
-                  <div>
-                    <h4 className="text-gray-500 mb-2">Frete</h4>
+                  <div className="group cursor-default">
+                    <h4 className="text-gray-600 mb-2 group-hover:text-gray-400 transition-colors">Frete</h4>
                     <p>Enviamos para todo o Brasil</p>
                   </div>
-                  <div>
-                    <h4 className="text-gray-500 mb-2">Pagamento</h4>
+                  <div className="group cursor-default">
+                    <h4 className="text-gray-600 mb-2 group-hover:text-gray-400 transition-colors">Pagamento</h4>
                     <p>Até 12x no cartão ou PIX</p>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             </div>
 
           </div>
         </div>
-      </main>
+      </motion.main>
     </div>
   );
 }

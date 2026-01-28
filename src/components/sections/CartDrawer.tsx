@@ -3,6 +3,7 @@
 import React, { useEffect } from "react";
 import { X, Plus, Minus, ShoppingCart, Trash2 } from "lucide-react";
 import { useCart } from "@/components/cart-context";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function CartDrawer() {
   const { 
@@ -24,221 +25,219 @@ export default function CartDrawer() {
     }
   }, [isDrawerOpen]);
 
-    const handleCheckout = () => {
-      if (items.length === 0) return;
-  
-      // Yampi Multi-product checkout format:
-      // seguro.seudominio.com.br/r/TOKEN1:QUANTITY1,TOKEN2:QUANTITY2
+  const handleCheckout = () => {
+    if (items.length === 0) return;
+
+    try {
+      const baseUrl = "https://seguro.finesseclub.com.br/r/";
+      const tokenMap = new Map<string, number>();
       
-      try {
-        const baseUrl = "https://seguro.finesseclub.com.br/r/";
-        
-        // Group by token to avoid duplicates in the URL if different products share the same token
-        const tokenMap = new Map<string, number>();
-        
-        items.forEach(item => {
-          if (item.checkoutUrl) {
-            // Extract token from URL (e.g., https://.../r/TOKEN)
-            const parts = item.checkoutUrl.split("/r/");
-            if (parts.length > 1) {
-              const token = parts[1].split(/[?#]/)[0]; // Remove any query params or hashes
-              if (token) {
-                tokenMap.set(token, (tokenMap.get(token) || 0) + item.quantity);
-              }
+      items.forEach(item => {
+        if (item.checkoutUrl) {
+          const parts = item.checkoutUrl.split("/r/");
+          if (parts.length > 1) {
+            const token = parts[1].split(/[?#]/)[0];
+            if (token) {
+              tokenMap.set(token, (tokenMap.get(token) || 0) + item.quantity);
             }
           }
-        });
-
-        if (tokenMap.size === 0) {
-          console.error("No valid checkout tokens found");
-          return;
         }
+      });
 
-        // Construct the token string: TOKEN1:QTY1,TOKEN2:QTY2
-        const tokenString = Array.from(tokenMap.entries())
-          .map(([token, qty]) => `${token}:${qty}`)
-          .join(",");
+      if (tokenMap.size === 0) return;
 
-        const finalUrl = `${baseUrl}${tokenString}`;
+      const tokenString = Array.from(tokenMap.entries())
+        .map(([token, qty]) => `${token}:${qty}`)
+        .join(",");
 
-        if (typeof window !== "undefined") {
-          // Check if we're in the Orchids preview environment
-          const isOrchids = window.location.hostname.includes("orchids") || 
-                           window.location.hostname.includes("localhost") ||
-                           window.location.hostname.includes("127.0.0.1");
+      const finalUrl = `${baseUrl}${tokenString}`;
 
-          if (isOrchids && window.self !== window.top) {
-            window.parent.postMessage({ 
-              type: "OPEN_EXTERNAL_URL", 
-              data: { url: finalUrl } 
-            }, "*");
-          } else {
-            // Direct redirect for production/Netlify
-            window.location.href = finalUrl;
-          }
+      if (typeof window !== "undefined") {
+        const isOrchids = window.location.hostname.includes("orchids") || 
+                         window.location.hostname.includes("localhost");
+
+        if (isOrchids && window.self !== window.top) {
+          window.parent.postMessage({ 
+            type: "OPEN_EXTERNAL_URL", 
+            data: { url: finalUrl } 
+          }, "*");
+        } else {
+          window.location.href = finalUrl;
         }
-      } catch (error) {
-        console.error("Error during checkout redirection:", error);
       }
-    };
-
-  if (!isDrawerOpen) return null;
+    } catch (error) {
+      console.error("Error during checkout redirection:", error);
+    }
+  };
 
   return (
-    <div className="fixed inset-0 z-[100] flex justify-end">
-      {/* Overlay */}
-      <div 
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
-        onClick={() => setIsDrawerOpen(false)}
-      />
-
-      {/* Drawer Content */}
-      <div className="relative w-full max-w-[400px] bg-black border-l border-white h-full flex flex-col shadow-2xl animate-in slide-in-from-right duration-300">
-        {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-white">
-          <div className="flex items-center gap-2">
-            <ShoppingCart className="w-4 h-4 text-white" />
-            <h2 className="text-sm font-bold uppercase tracking-widest text-white">
-              Seu Carrinho ({cartCount})
-            </h2>
-          </div>
-          <button 
+    <AnimatePresence>
+      {isDrawerOpen && (
+        <div className="fixed inset-0 z-[100] flex justify-end">
+          {/* Overlay */}
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
             onClick={() => setIsDrawerOpen(false)}
-            className="p-1 hover:opacity-70 transition-opacity"
+          />
+
+          {/* Drawer Content */}
+          <motion.div 
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+            className="relative w-full max-w-[420px] bg-black border-l border-white/10 h-full flex flex-col shadow-2xl"
           >
-            <X className="w-6 h-6 text-white" />
-          </button>
-        </div>
-
-        {/* Items List */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-8 scrollbar-hide">
-          {items.length === 0 ? (
-            <div className="h-full flex flex-col items-center justify-center space-y-4">
-              <span className="text-gray-500 text-xs uppercase tracking-widest">
-                Seu carrinho está vazio
-              </span>
-              <button 
-                onClick={() => setIsDrawerOpen(false)}
-                className="btn-luxury w-auto px-8"
-              >
-                Voltar às compras
-              </button>
-            </div>
-          ) : (
-            items.map((item) => (
-              <div key={item.id} className="flex gap-4 group">
-                {/* Product Thumbnail */}
-                <div className="w-24 aspect-[3/4] bg-muted flex items-center justify-center overflow-hidden border border-white/10">
-                  {item.image ? (
-                    <img 
-                      src={item.image} 
-                      alt={item.name} 
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <span className="text-[10px] text-muted-foreground text-center px-1 uppercase leading-tight font-bold">
-                      Imagem indisponível
-                    </span>
-                  )}
-                </div>
-
-                {/* Details */}
-                <div className="flex-1 flex flex-col justify-between py-1">
-                  <div>
-                    <div className="flex justify-between items-start">
-                      <h3 className="text-product-name text-white leading-tight pr-4">
-                        {item.name}
-                      </h3>
-                      <button 
-                        onClick={() => removeItem(item.id)}
-                        className="opacity-0 group-hover:opacity-100 transition-opacity text-white hover:text-destructive"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                    <span className="text-price text-white block mt-1">
-                      R$ {item.price.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
-                    </span>
-                  </div>
-
-                  {/* Quantity Selector */}
-                  <div className="flex items-center gap-4 mt-2">
-                    <div className="flex items-center border border-white">
-                      <button 
-                        onClick={() => updateQuantity(item.id, -1)}
-                        className="px-2 py-1 hover:bg-white hover:text-black transition-colors"
-                      >
-                        <Minus className="w-3 h-3" />
-                      </button>
-                      <span className="px-3 text-xs font-bold text-white border-x border-white py-1 min-w-[32px] text-center">
-                        {item.quantity}
-                      </span>
-                      <button 
-                        onClick={() => updateQuantity(item.id, 1)}
-                        className="px-2 py-1 hover:bg-white hover:text-black transition-colors"
-                      >
-                        <Plus className="w-3 h-3" />
-                      </button>
-                    </div>
-                  </div>
-                </div>
+            {/* Header */}
+            <div className="flex items-center justify-between p-6 border-b border-white/10">
+              <div className="flex items-center gap-3">
+                <ShoppingCart className="w-5 h-5 text-white" strokeWidth={1.5} />
+                <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-white">
+                  CARRINHO ({cartCount})
+                </h2>
               </div>
-            ))
-          )}
-        </div>
-
-        {/* Footer / Summary */}
-        {items.length > 0 && (
-          <div className="p-6 border-t border-white space-y-4">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
-                Subtotal
-              </span>
-              <span className="text-sm font-bold text-white">
-                R$ {subtotal.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
-              </span>
-            </div>
-            
-            <div className="flex flex-col gap-2">
-              <button 
-                onClick={handleCheckout}
-                className="bg-white text-black text-xs font-bold uppercase tracking-widest w-full py-4 border border-white hover:bg-black hover:text-white transition-all"
-              >
-                Finalizar Compra
-              </button>
               <button 
                 onClick={() => setIsDrawerOpen(false)}
-                className="btn-luxury py-4 border-white/20 hover:border-white"
+                className="p-2 hover:bg-white/5 rounded-full transition-colors group"
               >
-                Continuar Comprando
+                <X className="w-5 h-5 text-white group-hover:rotate-90 transition-transform duration-300" />
               </button>
             </div>
 
-            <p className="text-[10px] text-center text-muted-foreground uppercase tracking-tighter opacity-60">
-              Taxas e frete calculados no checkout
-            </p>
-          </div>
-        )}
-      </div>
+            {/* Items List */}
+            <div className="flex-1 overflow-y-auto p-6 space-y-8 scrollbar-hide">
+              {items.length === 0 ? (
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="h-full flex flex-col items-center justify-center space-y-6"
+                >
+                  <ShoppingCart className="w-12 h-12 text-white/10" strokeWidth={1} />
+                  <span className="text-gray-500 text-[10px] uppercase tracking-[0.2em]">
+                    Seu carrinho está vazio
+                  </span>
+                  <button 
+                    onClick={() => setIsDrawerOpen(false)}
+                    className="border border-white/20 px-8 py-3 text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-white hover:text-black transition-all"
+                  >
+                    Voltar às compras
+                  </button>
+                </motion.div>
+              ) : (
+                <div className="space-y-6">
+                  {items.map((item, idx) => (
+                    <motion.div 
+                      key={item.id}
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: idx * 0.1 }}
+                      className="flex gap-6 group"
+                    >
+                      {/* Product Thumbnail */}
+                      <div className="w-20 aspect-[3/4] bg-[#111] flex items-center justify-center overflow-hidden border border-white/5 group-hover:border-white/20 transition-colors">
+                        {item.image ? (
+                          <img 
+                            src={item.image} 
+                            alt={item.name} 
+                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                          />
+                        ) : (
+                          <span className="text-[10px] text-muted-foreground text-center px-1 uppercase leading-tight font-bold">
+                            N/A
+                          </span>
+                        )}
+                      </div>
 
-      <style jsx global>{`
-        .scrollbar-hide::-webkit-scrollbar {
-          display: none;
-        }
-        .scrollbar-hide {
-          -ms-overflow-style: none; /* IE and Edge */
-          scrollbar-width: none; /* Firefox */
-        }
-        
-        @keyframes slide-in-from-right {
-          from { transform: translateX(100%); }
-          to { transform: translateX(0); }
-        }
-        
-        .animate-in {
-          animation-fill-mode: forwards;
-        }
-      `}</style>
-    </div>
+                      {/* Details */}
+                      <div className="flex-1 flex flex-col justify-between py-1">
+                        <div>
+                          <div className="flex justify-between items-start">
+                            <h3 className="text-[11px] font-bold uppercase tracking-wider text-white leading-relaxed pr-4">
+                              {item.name}
+                            </h3>
+                            <button 
+                              onClick={() => removeItem(item.id)}
+                              className="text-gray-600 hover:text-white transition-colors"
+                            >
+                              <Trash2 className="w-4 h-4" strokeWidth={1.5} />
+                            </button>
+                          </div>
+                          <span className="text-[12px] font-bold text-white/60 block mt-2">
+                            R$ {item.price.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                          </span>
+                        </div>
+
+                        {/* Quantity Selector */}
+                        <div className="flex items-center gap-4 mt-4">
+                          <div className="flex items-center border border-white/20 hover:border-white/40 transition-colors">
+                            <button 
+                              onClick={() => updateQuantity(item.id, -1)}
+                              className="px-3 py-1.5 hover:bg-white hover:text-black transition-colors"
+                            >
+                              <Minus className="w-2.5 h-2.5" />
+                            </button>
+                            <span className="px-3 text-[10px] font-bold text-white border-x border-white/20 py-1.5 min-w-[32px] text-center">
+                              {item.quantity}
+                            </span>
+                            <button 
+                              onClick={() => updateQuantity(item.id, 1)}
+                              className="px-3 py-1.5 hover:bg-white hover:text-black transition-colors"
+                            >
+                              <Plus className="w-2.5 h-2.5" />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Footer / Summary */}
+            {items.length > 0 && (
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="p-8 border-t border-white/10 space-y-6"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500">
+                    Subtotal
+                  </span>
+                  <span className="text-[14px] font-bold text-white">
+                    R$ {subtotal.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+                  </span>
+                </div>
+                
+                <div className="flex flex-col gap-3">
+                  <button 
+                    onClick={handleCheckout}
+                    className="bg-white text-black text-[10px] font-bold uppercase tracking-[0.2em] w-full py-5 border border-white hover:bg-black hover:text-white transition-all duration-300 active:scale-[0.98]"
+                  >
+                    Finalizar Compra
+                  </button>
+                  <button 
+                    onClick={() => setIsDrawerOpen(false)}
+                    className="text-white/40 hover:text-white text-[10px] font-bold uppercase tracking-[0.2em] py-2 transition-colors"
+                  >
+                    Continuar Comprando
+                  </button>
+                </div>
+
+                <p className="text-[9px] text-center text-gray-600 uppercase tracking-widest opacity-60">
+                  Taxas e frete calculados no checkout
+                </p>
+              </motion.div>
+            )}
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
   );
 }
+
